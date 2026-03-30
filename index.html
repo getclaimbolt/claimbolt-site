@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaimBolt — Your insurer said no. We write back.</title>
+<meta name="description" content="Send us your denied insurance claim or surprise medical bill. We review it and write a professional appeal that gets results — in 48 hours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f2eb;
+    --cream: #ede9df;
+    --accent: #c8392b;
+    --accent-hover: #a82d22;
+    --muted: #6b6560;
+    --border: rgba(13,13,13,0.12);
+    --border-strong: rgba(13,13,13,0.22);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-weight: 300;
+    line-height: 1.6; overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 2.5rem;
+    background: rgba(245,242,235,0.92); backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 1.45rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .logo sub { font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 400; color: var(--muted); letter-spacing: 0.05em; vertical-align: baseline; margin-left: 3px; }
+  .nav-links { display: flex; align-items: center; }
+  .nav-links a { font-size: 0.83rem; color: var(--muted); text-decoration: none; padding: 0.4rem 1rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta { background: var(--ink) !important; color: var(--paper) !important; padding: 0.5rem 1.25rem !important; border-radius: 2px; font-weight: 500 !important; margin-left: 0.5rem; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--accent) !important; }
+
+  /* ── HERO ── */
+  .hero-wrap { max-width: 1140px; margin: 0 auto; padding: 0 2.5rem; }
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 420px; gap: 4rem; align-items: center; padding: 9rem 0 5rem; }
+
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.75rem; animation: fadeUp 0.5s ease both; }
+  .eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2.8rem, 5.5vw, 5rem); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.08s ease both; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.05rem; color: var(--muted); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.75; animation: fadeUp 0.6s 0.16s ease both; }
+  .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.24s ease both; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--ink); color: var(--paper); padding: 0.95rem 1.9rem; border: none; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+  .btn-ghost { font-size: 0.85rem; color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; transition: color 0.2s; }
+  .btn-ghost:hover { color: var(--ink); }
+  .hero-stats { margin-top: 4.5rem; padding-top: 2rem; border-top: 0.5px solid var(--border); display: flex; gap: 2.5rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.32s ease both; }
+  .stat-num { font-family: 'Instrument Serif', serif; font-size: 2.4rem; line-height: 1; color: var(--ink); }
+  .stat-num em { font-style: normal; color: var(--accent); }
+  .stat-label { font-size: 0.74rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.3rem; }
+
+  /* ── INTAKE CARD ── */
+  .intake-card {
+    background: var(--ink); border-radius: 4px; padding: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+    position: relative; overflow: hidden;
+  }
+  .intake-card::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px; background: var(--accent);
+    opacity: 0.07; border-radius: 50%; transform: translate(40%, -40%);
+  }
+  .card-eyebrow { font-size: 0.68rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(245,242,235,0.4); font-weight: 500; margin-bottom: 1.5rem; }
+
+  .field { margin-bottom: 1rem; }
+  .field-label { display: block; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,242,235,0.38); font-weight: 500; margin-bottom: 0.4rem; }
+  .field-input, .field-textarea {
+    width: 100%; background: rgba(245,242,235,0.07);
+    border: 0.5px solid rgba(245,242,235,0.16); border-radius: 2px;
+    padding: 0.78rem 0.95rem; color: var(--paper);
+    font-family: 'DM Sans', sans-serif; font-size: 0.87rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .field-input::placeholder, .field-textarea::placeholder { color: rgba(245,242,235,0.22); }
+  .field-input:focus, .field-textarea:focus { border-color: rgba(245,242,235,0.4); }
+  .field-input.err, .field-textarea.err { border-color: rgba(200,57,43,0.75); }
+  .field-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+  .file-note {
+    background: rgba(245,242,235,0.05);
+    border: 0.5px solid rgba(245,242,235,0.12);
+    border-left: 2px solid var(--accent);
+    border-radius: 2px; padding: 0.75rem 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .file-note p { font-size: 0.78rem; color: rgba(245,242,235,0.5); line-height: 1.6; }
+  .file-note strong { color: rgba(245,242,235,0.75); font-weight: 500; }
+
+  .btn-submit {
+    width: 100%; background: var(--accent); color: var(--paper);
+    border: none; border-radius: 2px; padding: 0.92rem 1.5rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-submit:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  .trust-line { margin-top: 1rem; font-size: 0.72rem; color: rgba(245,242,235,0.28); line-height: 1.5; }
+
+  /* Success */
+  .success-box { display: none; text-align: center; padding: 1.5rem 0; }
+  .success-box.show { display: block; }
+  .success-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+  .success-title { font-family: 'Instrument Serif', serif; font-size: 1.5rem; color: var(--paper); margin-bottom: 0.75rem; line-height: 1.2; }
+  .success-steps { text-align: left; margin-top: 1.5rem; }
+  .success-step { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.65rem 0; border-bottom: 0.5px solid rgba(245,242,235,0.1); }
+  .success-step:first-child { border-top: 0.5px solid rgba(245,242,235,0.1); }
+  .step-num-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--paper); font-size: 0.68rem; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .success-step p { font-size: 0.82rem; color: rgba(245,242,235,0.55); line-height: 1.55; }
+  .success-step strong { color: rgba(245,242,235,0.85); font-weight: 500; }
+
+  /* ── TICKER ── */
+  .ticker { background: var(--accent); overflow: hidden; padding: 0.9rem 0; white-space: nowrap; }
+  .ticker-inner { display: inline-flex; gap: 3rem; animation: ticker 28s linear infinite; }
+  .ticker-item { font-size: 0.78rem; font-weight: 500; color: rgba(245,242,235,0.85); letter-spacing: 0.04em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 1rem; }
+  .ticker-item::after { content: '·'; opacity: 0.4; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── SECTIONS ── */
+  .section { max-width: 1140px; margin: 0 auto; padding: 6rem 2.5rem; }
+  .sl { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .sl::before { content: ''; width: 18px; height: 1px; background: var(--accent); }
+  .h2 { font-family: 'Instrument Serif', serif; font-size: clamp(1.9rem, 3.5vw, 3rem); letter-spacing: -0.02em; line-height: 1.12; }
+
+  /* ── HOW IT WORKS ── */
+  .hiw-bg { background: var(--cream); }
+  .hiw-top { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-bottom: 4rem; }
+  .hiw-top p { font-size: 0.95rem; color: var(--muted); line-height: 1.8; margin-top: 1rem; }
+  .steps { counter-reset: s; display: flex; flex-direction: column; }
+  .step { counter-increment: s; display: grid; grid-template-columns: 56px 1fr; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 0.5px solid var(--border); align-items: start; }
+  .step:first-child { border-top: 0.5px solid var(--border); }
+  .step-n { font-family: 'Instrument Serif', serif; font-size: 2.5rem; color: var(--border); line-height: 1; font-style: italic; }
+  .step-n::before { content: counter(s, decimal-leading-zero); }
+  .step-b h3 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.4rem; padding-top: 0.3rem; }
+  .step-b p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* ── PRICING ── */
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 0.5px solid var(--border); margin-top: 3rem; }
+  .pc { padding: 2.5rem 2.25rem; background: var(--paper); }
+  .pc.dk { background: var(--ink); color: var(--paper); }
+  .ptag { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--muted); margin-bottom: 2rem; }
+  .dk .ptag { color: rgba(245,242,235,0.4); }
+  .pamt { font-family: 'Instrument Serif', serif; font-size: 3.8rem; line-height: 1; margin-bottom: 0.4rem; }
+  .pdesc { font-size: 0.83rem; color: var(--muted); margin-bottom: 2.25rem; line-height: 1.6; }
+  .dk .pdesc { color: rgba(245,242,235,0.5); }
+  .plist { list-style: none; }
+  .plist li { font-size: 0.86rem; padding: 0.65rem 0; border-bottom: 0.5px solid var(--border); display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.5; }
+  .dk .plist li { border-color: rgba(245,242,235,0.1); }
+  .plist li::before { content: '→'; color: var(--accent); font-size: 0.72rem; flex-shrink: 0; padding-top: 2px; }
+  .dk .plist li::before { color: #e8a09a; }
+  .pbtn { display: inline-block; margin-top: 2rem; padding: 0.85rem 1.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.87rem; font-weight: 500; border: 0.5px solid var(--border-strong); color: var(--ink); text-decoration: none; border-radius: 2px; transition: all 0.2s; }
+  .pbtn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .dk .pbtn { border-color: rgba(245,242,235,0.25); color: var(--paper); }
+  .dk .pbtn:hover { background: var(--accent); border-color: var(--accent); }
+
+  /* ── WHY ── */
+  .why-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; border: 0.5px solid var(--border); margin-top: 3rem; }
+  .wc { background: var(--paper); padding: 2rem 1.75rem; }
+  .wi { font-size: 1.4rem; margin-bottom: 1rem; }
+  .wc h3 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.5rem; }
+  .wc p { font-size: 0.85rem; color: var(--muted); line-height: 1.75; }
+
+  /* ── TESTIMONIALS ── */
+  .tb { background: var(--ink); }
+  .tw { max-width: 1140px; margin: 0 auto; padding: 6rem 2.5rem; }
+  .tw .sl { color: rgba(245,242,235,0.4); }
+  .tw .sl::before { background: rgba(245,242,235,0.4); }
+  .tg { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-top: 3rem; }
+  .tc { padding: 2rem 1.75rem; border: 0.5px solid rgba(245,242,235,0.1); }
+  .stars { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .quote { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--paper); line-height: 1.55; font-style: italic; margin-bottom: 1.5rem; }
+  .rev { font-size: 0.78rem; color: rgba(245,242,235,0.4); }
+  .rev strong { color: rgba(245,242,235,0.7); font-weight: 500; }
+  .rec { display: inline-block; margin-top: 0.75rem; background: rgba(200,57,43,0.2); color: #e8a09a; font-size: 0.75rem; font-weight: 500; padding: 0.3rem 0.75rem; border-radius: 2px; letter-spacing: 0.05em; }
+
+  /* ── CTA ── */
+  .cta { background: var(--accent); padding: 6rem 2.5rem; text-align: center; }
+  .cta h2 { font-family: 'Instrument Serif', serif; font-size: clamp(2.2rem, 4.5vw, 4rem); color: var(--paper); line-height: 1.08; letter-spacing: -0.025em; max-width: 640px; margin: 0 auto 1.25rem; }
+  .cta h2 em { font-style: italic; opacity: 0.65; }
+  .cta p { color: rgba(245,242,235,0.7); font-size: 1rem; margin-bottom: 2.5rem; }
+  .btn-lt { display: inline-block; background: var(--paper); color: var(--ink); padding: 1.05rem 2.5rem; border: none; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn-lt:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .cta-note { margin-top: 1.25rem; font-size: 0.75rem; color: rgba(245,242,235,0.45); }
+
+  /* ── FAQ ── */
+  .faq-wrap { max-width: 720px; }
+  .faq-list { margin-top: 3rem; border-top: 0.5px solid var(--border); }
+  .faq-item { border-bottom: 0.5px solid var(--border); }
+  .faq-btn { width: 100%; background: none; border: none; display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 0; cursor: pointer; text-align: left; gap: 1rem; }
+  .faq-q { font-size: 0.95rem; font-weight: 500; color: var(--ink); line-height: 1.4; }
+  .faq-tog { width: 26px; height: 26px; flex-shrink: 0; border: 0.5px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--muted); transition: all 0.2s; }
+  .faq-item.open .faq-tog { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .faq-ans { font-size: 0.87rem; color: var(--muted); line-height: 1.8; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s; }
+  .faq-item.open .faq-ans { max-height: 300px; padding-bottom: 1.4rem; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--ink); border-top: 0.5px solid rgba(245,242,235,0.08); }
+  .fi { max-width: 1140px; margin: 0 auto; padding: 3.5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; align-items: start; }
+  .fl { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: var(--paper); display: block; margin-bottom: 0.75rem; }
+  .fl span { color: #e8a09a; }
+  .ft { font-size: 0.82rem; color: rgba(245,242,235,0.4); line-height: 1.6; }
+  .fc h4 { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,242,235,0.3); margin-bottom: 1.25rem; }
+  .fc a { display: block; font-size: 0.83rem; color: rgba(245,242,235,0.55); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+  .fc a:hover { color: var(--paper); }
+  .fb { max-width: 1140px; margin: 0 auto; padding: 1.5rem 2.5rem; border-top: 0.5px solid rgba(245,242,235,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+  .fb p { font-size: 0.74rem; color: rgba(245,242,235,0.25); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 8rem 0 4rem; gap: 3rem; }
+    .hiw-top, .price-grid, .why-grid, .tg, .fi { grid-template-columns: 1fr; }
+    .section { padding: 4rem 1.5rem; }
+    .hero-wrap { padding: 0 1.5rem; }
+    .fb { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Claim<span>Bolt</span><sub>getclaimbolt.com</sub></a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#start" class="nav-cta">Fight My Bill →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Medical bill &amp; insurance appeal service</p>
+      <h1>Your insurer said no.<br><em>We write back.</em></h1>
+      <p class="hero-sub">Send us your denied claim or surprise medical bill. We review it, find the leverage in your policy, and write a professional appeal — delivered in 48 hours.</p>
+      <div class="hero-actions">
+        <a href="#start" class="btn-primary">Start My Appeal — $79 →</a>
+        <a href="#how" class="btn-ghost">See how it works ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">60<em>%</em></div><div class="stat-label">of denials never appealed</div></div>
+        <div><div class="stat-num">40–60<em>%</em></div><div class="stat-label">appeal success rate</div></div>
+        <div><div class="stat-num">$1,200</div><div class="stat-label">average denial value</div></div>
+      </div>
+    </div>
+
+    <!-- INTAKE CARD -->
+    <div class="intake-card" id="start">
+      <div class="card-eyebrow">Get started — free consultation</div>
+
+      <!-- Success state -->
+      <div class="success-box" id="successBox">
+        <div class="success-emoji">✅</div>
+        <div class="success-title">We've received your request.</div>
+        <div class="success-steps">
+          <div class="success-step">
+            <div class="step-num-badge">1</div>
+            <p>Check your inbox — you'll get a confirmation email from us shortly.</p>
+          </div>
+          <div class="success-step">
+            <div class="step-num-badge">2</div>
+            <p><strong>Reply to that email</strong> and attach your denial letter, EOB, or medical bill. A phone photo is fine.</p>
+          </div>
+          <div class="success-step">
+            <div class="step-num-badge">3</div>
+            <p>We'll review everything and send your appeal letter within <strong>48 hours</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="appealForm" action="https://formspree.io/f/xgopajbl" method="POST">
+
+        <div class="field">
+          <label class="field-label" for="nameInput">Your name</label>
+          <input class="field-input" type="text" name="name" id="nameInput" placeholder="Jane Smith" required>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="emailInput">Your email address</label>
+          <input class="field-input" type="email" name="email" id="emailInput" placeholder="you@example.com" required>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="descInput">Tell us about your situation</label>
+          <textarea class="field-textarea" name="description" id="descInput" placeholder="e.g. Blue Cross denied my MRI as 'not medically necessary.' My doctor ordered it after 3 months of back pain. Bill is $2,400." required></textarea>
+        </div>
+
+        <div class="file-note">
+          <p>📎 &nbsp;<strong>After submitting</strong>, we'll email you with instructions to send your denial letter or bill. No upload needed right now.</p>
+        </div>
+
+        <button class="btn-submit" id="btnSubmit" type="submit">
+          <span id="btnLabel">Send My Request →</span>
+        </button>
+
+      </form>
+
+      <p class="trust-line">🔒 &nbsp;Everything you share is confidential. We never share your information with your insurer or provider.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="ticker-item">Denied claims reversed</span>
+    <span class="ticker-item">48-hour turnaround</span>
+    <span class="ticker-item">Contingency available — pay nothing upfront</span>
+    <span class="ticker-item">Medical · Dental · Vision · Rx</span>
+    <span class="ticker-item">Prior auth denials</span>
+    <span class="ticker-item">Out-of-network surprise bills</span>
+    <span class="ticker-item">Not medically necessary appeals</span>
+    <span class="ticker-item">Denied claims reversed</span>
+    <span class="ticker-item">48-hour turnaround</span>
+    <span class="ticker-item">Contingency available — pay nothing upfront</span>
+    <span class="ticker-item">Medical · Dental · Vision · Rx</span>
+    <span class="ticker-item">Prior auth denials</span>
+    <span class="ticker-item">Out-of-network surprise bills</span>
+    <span class="ticker-item">Not medically necessary appeals</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="hiw-bg" id="how">
+  <div class="section">
+    <div class="hiw-top">
+      <div>
+        <div class="sl">The process</div>
+        <h2 class="h2">From denial letter<br>to appeal in 48 hours.</h2>
+        <p>Insurance companies count on you giving up. Most people do — 60% of denied claims are never appealed. We turn your denial into a professional, policy-specific appeal that speaks the language insurers actually respond to.</p>
+      </div>
+      <div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-n"></div><div class="step-b"><h3>Tell us about your situation</h3><p>Fill in the form with your name, email, and a brief description of your denied claim or surprise bill. No documents needed yet — just a few sentences about what happened.</p></div></div>
+      <div class="step"><div class="step-n"></div><div class="step-b"><h3>Send us your documents</h3><p>We'll email you within a few hours with instructions to send your denial letter, Explanation of Benefits (EOB), or itemized bill. A phone photo is perfectly fine — PDF, JPG, or PNG all work.</p></div></div>
+      <div class="step"><div class="step-n"></div><div class="step-b"><h3>We find the leverage</h3><p>Our team reads your denial reason codes, cross-references your plan's specific coverage language, and identifies the exact policy provisions that apply. Most denials have at least one technical error or applicable regulation the insurer didn't account for.</p></div></div>
+      <div class="step"><div class="step-n"></div><div class="step-b"><h3>You get a ready-to-send appeal</h3><p>Within 48 hours of receiving your documents, you get a complete, professionally written appeal letter — with the right citations, the right tone for your specific insurer, and clear instructions for where to send it.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section" id="pricing">
+  <div class="sl">Pricing</div>
+  <h2 class="h2" style="max-width:520px">Two ways to work<br>with us. Both fair.</h2>
+  <div class="price-grid">
+    <div class="pc">
+      <div class="ptag">Flat fee · Best for smaller bills</div>
+      <div class="pamt">$79</div>
+      <div class="pdesc">Pay once, upfront. Your appeal delivered within 48 hours of receiving your documents.</div>
+      <ul class="plist">
+        <li>Full denial or overbilling review</li>
+        <li>Professional appeal letter written</li>
+        <li>Policy citations and denial code analysis</li>
+        <li>Insurer-specific tone and language</li>
+        <li>Delivered in 48 hours</li>
+        <li>One round of revisions included</li>
+      </ul>
+      <a href="#start" class="pbtn">Get started →</a>
+    </div>
+    <div class="pc dk">
+      <div class="ptag">Contingency · Best for larger bills</div>
+      <div class="pamt" style="color:var(--paper)">20%</div>
+      <div class="pdesc">You pay nothing unless we recover money. We take 20% of whatever we win back.</div>
+      <ul class="plist">
+        <li>Everything in the flat fee plan</li>
+        <li>No upfront cost whatsoever</li>
+        <li>We follow through the full appeals process</li>
+        <li>Escalation support at every level</li>
+        <li>External review and commissioner filings if needed</li>
+        <li>We only win when you win</li>
+      </ul>
+      <a href="#start" class="pbtn">Start for free →</a>
+    </div>
+  </div>
+</div>
+
+<!-- WHY CLAIMBOLT -->
+<div class="section" style="padding-top:0">
+  <div class="sl">Why ClaimBolt</div>
+  <h2 class="h2" style="max-width:480px;margin-bottom:0">Built for the letter you<br>don't know how to fight.</h2>
+  <div class="why-grid">
+    <div class="wc"><div class="wi">⚖️</div><h3>We speak insurance fluently</h3><p>Denial reason codes, CPT codes, ICD-10 classifications, plan coverage exclusions — we read it so you don't have to. Your appeal references the exact policy provisions that matter.</p></div>
+    <div class="wc"><div class="wi">⚡</div><h3>Appeals have deadlines — we move fast</h3><p>Most insurers allow only 30–180 days to appeal. Miss the window and your right is gone. We deliver in 48 hours so you always have time to act.</p></div>
+    <div class="wc"><div class="wi">🎯</div><h3>We know what actually works</h3><p>Different insurers respond to different approaches. We track what language, what documentation, and what escalation paths get denials reversed — and apply that to every case.</p></div>
+    <div class="wc"><div class="wi">🔁</div><h3>We don't stop at the first letter</h3><p>If the first appeal is denied, there are more options — internal appeals level 2, external independent review, state insurance commissioner. We know every escalation path.</p></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="tb">
+  <div class="tw">
+    <div class="sl">Results</div>
+    <h2 class="h2" style="color:var(--paper);max-width:420px">What people got back.</h2>
+    <div class="tg">
+      <div class="tc"><div class="stars">★★★★★</div><div class="quote">"My claim was denied twice. ClaimBolt's letter referenced a clause I had no idea was in my policy. Approved in 11 days."</div><div class="rev"><strong>Sarah M.</strong> · Austin, TX</div><div class="rec">Recovered $3,200</div></div>
+      <div class="tc"><div class="stars">★★★★★</div><div class="quote">"They found a duplicate billing error my hospital made three times. Got back money I didn't even know they owed me."</div><div class="rev"><strong>James R.</strong> · Chicago, IL</div><div class="rec">Recovered $2,340</div></div>
+      <div class="tc"><div class="stars">★★★★★</div><div class="quote">"I was about to just pay the bill. $79 to have someone write the appeal felt like a gamble. Got back $1,800. Best decision I made."</div><div class="rev"><strong>Maria K.</strong> · Phoenix, AZ</div><div class="rec">Recovered $1,800</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Stop leaving money<br><em>on the table.</em></h2>
+  <p>Tell us about your situation. We'll take it from there.</p>
+  <a href="#start" class="btn-lt">Start My Appeal →</a>
+  <p class="cta-note">Questions? Email us at appeals@getclaimbolt.com · We respond within a few hours.</p>
+</div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="faq-wrap">
+    <div class="sl">Common questions</div>
+    <h2 class="h2">Things people ask<br>before getting started.</h2>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">What types of bills and denials can you help with?</span><div class="faq-tog">+</div></button><div class="faq-ans">We handle insurance claim denials (medical, dental, vision, prescription), surprise out-of-network bills, prior authorization denials, claims denied as "not medically necessary," and itemized hospital bills with suspected coding errors. If it doesn't feel right, tell us about it — consultation is free.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">What do I need to send you?</span><div class="faq-tog">+</div></button><div class="faq-ans">Fill in the form with a brief description of your situation. After submitting, we'll email you with instructions to send your denial letter or Explanation of Benefits (EOB). A clear phone photo works fine — no scanning needed. If you have the original itemized bill and any communications from your provider, those help too.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">How does the contingency option work exactly?</span><div class="faq-tog">+</div></button><div class="faq-ans">You pay nothing upfront. We write and support your appeal. If the denial is reversed or your bill is reduced, we collect 20% of the amount you recover. If we don't win anything, you owe us nothing. We only make money when you do.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">Do you guarantee that my appeal will succeed?</span><div class="faq-tog">+</div></button><div class="faq-ans">No one can guarantee an insurance reversal — anyone who tells you otherwise is lying. What we guarantee is a professionally written, policy-accurate appeal that gives you the best possible chance. Nationally, 40–60% of appeals succeed when they're actually filed. The problem is 60% of people never file one at all.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">What if my appeal is denied a second time?</span><div class="faq-tog">+</div></button><div class="faq-ans">Most insurers have multiple levels of internal appeal. After that, you have the right to an independent external review — required by law in most states. If that fails, you can file a complaint with your state insurance commissioner. We guide you through every step.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">How is my information kept private?</span><div class="faq-tog">+</div></button><div class="faq-ans">Everything you share is treated as strictly confidential. We do not share your information with your insurer, your provider, or any third party. We use your details solely to prepare your appeal. We do not sell your data.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="faq(this)"><span class="faq-q">Are you a law firm? Is this legal advice?</span><div class="faq-tog">+</div></button><div class="faq-ans">No, ClaimBolt is not a law firm and this is not legal advice. We are a professional appeal writing and review service. The vast majority of denial appeals are administrative — not legal — matters that do not require an attorney to resolve.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div>
+      <a href="#" class="fl">Claim<span>Bolt</span></a>
+      <p class="ft">Professional insurance appeal writing.<br>We fight the letter. You keep the money.</p>
+    </div>
+    <div class="fc">
+      <h4>Service</h4>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#start">Start an appeal</a>
+    </div>
+    <div class="fc">
+      <h4>Contact</h4>
+      <a href="mailto:appeals@getclaimbolt.com">appeals@getclaimbolt.com</a>
+      <a href="mailto:hello@getclaimbolt.com">hello@getclaimbolt.com</a>
+    </div>
+  </div>
+  <div class="fb">
+    <p>© 2025 ClaimBolt · getclaimbolt.com</p>
+    <p>Not a law firm. Not legal advice. Just people who know how to read a denial letter.</p>
+  </div>
+</footer>
+
+<script>
+  const form       = document.getElementById('appealForm');
+  const successBox = document.getElementById('successBox');
+  const btnSubmit  = document.getElementById('btnSubmit');
+  const btnLabel   = document.getElementById('btnLabel');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    // Basic validation
+    const name  = document.getElementById('nameInput');
+    const email = document.getElementById('emailInput');
+    const desc  = document.getElementById('descInput');
+    let valid = true;
+
+    [name, email, desc].forEach(el => el.classList.remove('err'));
+
+    if (!name.value.trim())  { name.classList.add('err');  valid = false; }
+    if (!email.value || !email.value.includes('@')) { email.classList.add('err'); valid = false; }
+    if (!desc.value.trim())  { desc.classList.add('err');  valid = false; }
+
+    if (!valid) return;
+
+    btnSubmit.disabled = true;
+    btnLabel.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        successBox.classList.add('show');
+      } else {
+        btnLabel.textContent = 'Something went wrong — try again';
+        btnSubmit.disabled = false;
+      }
+    } catch {
+      btnLabel.textContent = 'Network error — try again';
+      btnSubmit.disabled = false;
+    }
+  });
+
+  function faq(btn) {
+    const item   = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-tog').textContent = '+';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.querySelector('.faq-tog').textContent = '×';
+    }
+  }
+</script>
+</body>
+</html>
